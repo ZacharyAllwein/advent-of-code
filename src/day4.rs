@@ -45,12 +45,60 @@ pub fn part1<T: std::io::Read>(buf: std::io::BufReader<T>) {
                 }
             }
         }
+        match find_winners(&boards) {
+            None => (),
+            Some(board) => {
+                println!("{:?}", calculate_score(&board, num));
+                break;
+            }
+        }
     }
-
-    println!("{:?}", boards);
 }
 
-fn find_winners(boards: &Vec<Vec<Vec<RefCell<BingoSquare>>>>) -> Option<Vec<RefCell<BingoSquare>>> {
+fn find_winners(
+    boards: &Vec<Vec<Vec<RefCell<BingoSquare>>>>,
+) -> Option<&Vec<Vec<RefCell<BingoSquare>>>> {
+    let mut wincons: Vec<Vec<(u8, u8)>> =
+        (0..5).map(|x| (0..5).map(|y| (x, y)).collect()).collect();
+    let mut vertical_wincons: Vec<Vec<(u8, u8)>> =
+        (0..5).map(|x| (0..5).map(|y| (y, x)).collect()).collect();
+
+    wincons.append(&mut vertical_wincons);
+
+    for board in boards {
+        for wincon in &wincons {
+            let mut won = true;
+
+            for con in wincon {
+                if board[con.0 as usize][con.1 as usize].borrow().marked == false {
+                    won = false;
+                    break;
+                }
+            }
+
+            if won == true {
+                return Some(board);
+            }
+        }
+    }
+
+    None
+}
+
+fn calculate_score(board: &Vec<Vec<RefCell<BingoSquare>>>, last_num: u8) -> u32 {
+    board
+        .iter()
+        .map(|row| {
+            row.iter().fold(0, |total, square| {
+                let square = square.borrow();
+                if !square.marked {
+                    return total + square.num as u32;
+                }
+                total
+            })
+        })
+        .fold(0, |total, row_sum| total + row_sum as u32)
+        * last_num as u32
 }
 
 #[derive(Debug)]
