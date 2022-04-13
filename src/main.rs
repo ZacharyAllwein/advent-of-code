@@ -1,14 +1,12 @@
 use std::fs::File;
-use std::io::{prelude::*, BufReader};
+use std::io::BufReader;
 
-mod day3;
+mod day4;
 
 fn main() {
     let data = File::open("data.txt").unwrap();
 
     let buf = BufReader::new(data);
 
-    let lines: Vec<Vec<u8>> = buf.lines().map(|line| line.unwrap().into_bytes()).collect();
-
-    day3::part2(lines);
+    day4::part1(buf);
 }

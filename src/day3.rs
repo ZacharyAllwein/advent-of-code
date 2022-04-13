@@ -1,5 +1,8 @@
-pub fn part2(lines: Vec<Vec<u8>>) {
-    let mut most_common_bits: Vec<Vec<u8>> = lines;
+use std::io::prelude::*;
+
+pub fn part2<T: std::io::Read>(buf: std::io::BufReader<T>) {
+    let mut most_common_bits: Vec<Vec<u8>> =
+        buf.lines().map(|line| line.unwrap().into_bytes()).collect();
     let mut least_common_bits: Vec<Vec<u8>> = most_common_bits.clone();
 
     for i in 0..most_common_bits[0].len() {
