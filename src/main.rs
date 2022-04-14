@@ -1,12 +1,12 @@
 use std::fs::File;
 use std::io::BufReader;
 
-mod day4;
+mod day5;
 
 fn main() {
     let data = File::open("data.txt").unwrap();
 
     let buf = BufReader::new(data);
 
-    day4::part2(buf);
+    day5::part1(buf);
 }
