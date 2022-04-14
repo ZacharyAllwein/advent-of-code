@@ -8,5 +8,5 @@ fn main() {
 
     let buf = BufReader::new(data);
 
-    day4::part1(buf);
+    day4::part2(buf);
 }
